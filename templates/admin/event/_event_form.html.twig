@@ -1,0 +1,40 @@
+{{ form_start( form, { attr: {novalidate: 'novalidate'} } ) }}
+
+    <div class="row">
+        <div class="col-md-6">
+            {{ form_row(form.title) }}
+        </div>
+        <div class="col-md-6">
+            {{ form_row(form.event_date) }}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <label class="form-label required">Adresse *</label>
+            <div id="geocoder" class="geocoder"></div>
+        </div>
+        <div class="col-md-6">
+            {{ form_row(form.maxAttendants) }}
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-6">
+            {{ form_row(form.description) }}
+            {{ form_row(form.categories)  }}
+        </div>
+        <div class="col-md-6">
+            <div id="map"></div>
+        </div>
+    </div>
+
+    <div class="my-3">
+        <a class="btn btn-secondary me-2" href="{{ path('admin_event_list') }}">
+            <i class="fas fa-angle-left me-2"></i>Annuler</a>
+
+        <button type="submit" class="btn btn-success">{{ button_label ?? 'Créer la sortie' }}</button>
+    </div>
+
+{{ form_end(form) }}

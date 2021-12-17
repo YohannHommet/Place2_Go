@@ -1,0 +1,119 @@
+{% extends "layout/base.html.twig" %}
+
+{% block title 'Home' %}
+
+{% block banner %}
+
+	<div class="masthead" role="img" aria-label="Image Description">
+		<div class="row w-100">
+			<div class="col-sm-12 col-md-10 col-lg-8 col-xl-6 mx-auto">
+				<h1 class="masthead__brand mb-5">P<span id="text"></span></h1>
+				{% include "event/_filter_home.html.twig" %}
+			</div>
+		</div>
+	</div>
+
+{% endblock %}
+
+{% block body %}
+
+	<section class="container topCategories">
+		<h2 class="home__title">Top Catégories</h2>
+
+		<div class="topScore">
+
+			{% for category in topCategories %}
+				<div class="topScore__card">
+					<div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
+						<img src="{{ category[0].picture }}" class="card-img-top" alt="Catégorie {{ category[0].name }}"/>
+						<a href="/events?q=&categories%5B%5D={{ category[0].id }}" class="card-img-overlay">
+							<div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+							<h3 class="text-center">{{ category[0].name }}</h3>
+							{% if category.nbrEvents > 0 %}
+								<span class="badge badge-primary">
+									{{ category.nbrEvents }}
+									sorties
+								</span>
+							{% endif %}
+						</a>
+					</div>
+				</div>
+			{% endfor %}
+
+		</div>
+	</section>
+
+	<section class="descriptionPlace">
+		<div class="descriptionPlace__picture">
+			<img src="{{ asset('img/ville-silhouette.png') }}" alt="image du site" class="">
+		</div>
+
+		<div class="descriptionPlace__description">
+			<h2>Bienvenue sur Place 2 Go !</h2>
+			<p>
+				Place 2 Go c'est The Place pour participer à toutes sortes d'activités, faire des rencontres, et partager des bons moments. Pour cela, rien de plus simple... Inscrivez-vous sur le site, et proposer une sortie !
+																Que ce soit une simple balade, un concert, ou un p'tit resto dans votre lieu favori, vous avez l'embarras du choix.
+			</p>
+			<img src="{{ asset('img/pinmap.png') }}" alt="pin" draggable="false">
+		</div>
+	</section>
+
+	<section class="container topCities">
+		<h2 class="home__title">Sorties du moment</h2>
+
+		<div class="topScore">
+			{% for event in randEvents %}
+				<div class="home__card">
+					<div class="home__card_image">
+						<a href="{{ path('app_event_show', {id: event.id}) }}">
+							<img src="{{ event.categories[0].picture }}" alt="{{ event.categories[0].name }}" class="rounded-circle"/>
+						</a>
+					</div>
+
+					<div class="home__card_content">
+						<div class="home__card_date">
+							le
+							{{ event.eventDate | format_date('none', 'd MMMM Y à HH:mm', null, 'gregorian', 'fr')}}
+						</div>
+
+						<div class="home__card_title">
+							<a href="{{ path('app_event_show', {id: event.id}) }}" class="text-decoration-underline">{{ event.title }}</a>
+						</div>
+
+					</div>
+				</div>
+			{% else %}
+				<div>
+					Nous n'avons pas trouvé de sorties proches de chez vous.. Essayez d'effecter une recherche <a
+							href="{{ path('app_event_list') }}">ici</a>
+				</div>
+			{% endfor %}
+		</div>
+	</section>
+
+	<section class="container topContributors">
+		<h2 class="home__title">Top Contributeurs</h2>
+
+		<div class="topScore">
+			{% for contributors in topContributors %}
+				<a href="{{ path("app_profile_show", {id: contributors[0].id}) }}">
+					<div class="card topScore__content">
+						<div class="topScore__content-avatar">
+							<img src="{{ contributors[0].avatar }}" alt="avatar de {{ contributors[0].nickname }}">
+						</div>
+						<div class="card-body">
+							<h3 class="card-title">{{ contributors[0].nickname }}</h3>
+							{% if contributors.nbrEvents > 0 %}
+								<span class="badge badge-primary">
+									{{ contributors.nbrEvents }}
+									sorties
+								</span>
+							{% endif %}
+						</div>
+					</div>
+				</a>
+			{% endfor %}
+		</div>
+	</section>
+
+{% endblock %}

@@ -1,0 +1,115 @@
+<footer id="footer">
+	<div
+		class="container">
+
+		<!-- Social Networks -->
+		<div class="row">
+			<div class="col-sm-6 col-md-4 mx-auto text-center">
+				<div class="icon__list">
+					<a href="#" target="_blank" rel="noopener" title="Twitter" class="icon__list_icons">
+						<i class="fab fa-twitter fa-3x"></i>
+					</a>
+					<a href="#" target="_blank" rel="noopener" title="GitHub" class="icon__list_icons me-2">
+						<i class="fab fa-github fa-3x"></i>
+					</a>
+					<a href="#" target="_blank" rel="noopener" title="Facebook" class="icon__list_icons">
+						<i class="fab fa-facebook fa-3x"></i>
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<!-- Divider -->
+		<hr class="footer__divider">
+
+		<div
+			class="row">
+
+			<!-- Links Column -->
+			<div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
+				<ul class="footer__links">
+					<li class="mb-2">
+						<i class="fas fa-caret-right"></i>
+						<a href="{{ path('app_main_team') }}">Team</a>
+					</li>
+					<li class="mb-2">
+						<i class="fas fa-caret-right"></i>
+						<a href="{{ path('app_contact_contact') }}">Contactez-nous</a>
+					</li>
+					<li class="mb-2">
+						<i class="fas fa-caret-right"></i>
+						<a href="{{ path('app_legal_notice') }}">Mentions légales</a>
+					</li>
+					<li class="mb-2">
+						<i class="fas fa-caret-right"></i>
+						<a href="{{ path('app_privacy_policy') }}">Confidentialité</a>
+					</li>
+					<li class="mb-2">
+						<i class="fas fa-caret-right"></i>
+						<a href="{{ path('app_cgu') }}">CGU</a>
+					</li>
+					<li class="mb-2">
+						<i class="fas fa-caret-right"></i>
+						<a href="{{ path('app_500') }}">500</a>
+					</li>
+				</ul>
+			</div>
+
+			<!-- Place To Random Column -->
+			<div class="col-lg-3 col-md-6 mb-3 mb-lg-0">
+				<div class="footer__title">Place To Random</div>
+				<ul class="list-unstyled">
+					{% for event in eventRepository.findRandEvents(app.user.city ?? '') %}
+						<li class="mb-2">
+							<a href="{{ path("app_event_show", {id: event.id}) }}">{{ event.title }}</a>
+						</li>
+					{% else %}
+						<p style="font-size: 0.8rem; color: #d9d9d9">Aucune sortie proche de chez vous.</p>
+					{% endfor %}
+				</ul>
+			</div>
+
+			<!-- Popular Categories Column -->
+			<div class="col-lg-3 col-md-6 mb-3 mb-lg-0">
+				<div class="footer__title">Catégories populaires</div>
+				<ul class="list-unstyled">
+					{% for category in categoryRepository.findTopCategories %}
+						<li class="mb-2">
+							<a href="/events?q=&categories%5B%5D={{ category[0].id }}">{{ category[0].name }}</a>
+						</li>
+					{% endfor %}
+				</ul>
+			</div>
+
+			<!-- Top Contributors Column -->
+			<div class="col-lg-3 col-md-6 mb-3 mb-lg-0">
+				<div class="footer__title">Top Contributeurs</div>
+				<ul class="list-unstyled">
+					{% for contributor in eventRepository.findTopContributors %}
+						<li class="mb-2">
+							<a href="{{ path("app_profile_show", {id: contributor[0].id}) }}">{{ contributor[0].nickname }}</a>
+						</li>
+					{% endfor %}
+				</ul>
+			</div>
+
+		</div>
+
+		<!-- Copyright Bottom -->
+		<div>
+			<div class="text-center">Copyright ©
+				{{ date('Y') | date('Y') }}</div>
+
+			<div class="text-center text-sm fst-italic">
+				Made with
+				<i class="fas fa-heart text-danger"></i>
+				by
+				<a href="http://">Daniel</a>,
+				<a href="http://">Fred</a>,
+				<a href="http://">Oriane</a>,
+				<a href="http://">Yohann</a>
+			</div>
+		</div>
+
+	</div>
+</footer>

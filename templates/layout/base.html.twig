@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<meta name="description" content="Place 2 Go est un site communautaire qui permets de partager des activités entre utilisateurs">
+		<meta name="keywords" content="place go fun party friends people meet rencontre activité event sortie ville sport balade découverte restaurant café plage amis">
+		<meta name="author" content="Daniel, Fred, Oriane, Yohann">
+		<meta name="copyright" content="{{ date('Y') | date('Y') }}">
+
+		<link rel="shortcut icon" href="{{ asset('img/favicon.png') }}">
+
+		{% block meta %}{% endblock %}
+
+		{# MDB #}
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.css" rel="stylesheet"/>
+		{# Font Awesome #}
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet"/>
+		{# MAPBOX CSS #}
+		<link href="https://api.mapbox.com/mapbox-gl-js/v2.4.1/mapbox-gl.css" rel="stylesheet">
+		<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" type="text/css">
+		{# MAPBOX JS #}
+		<script src="https://api.mapbox.com/mapbox-gl-js/v2.4.1/mapbox-gl.js"></script>
+		<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
+
+		{% block stylesheets %}
+			{{ encore_entry_link_tags('app') }}
+		{% endblock %}
+
+		{% block javascripts %}
+			{{ encore_entry_script_tags('app') }}
+		{% endblock %}
+
+		<title>
+			{% block title %}{% endblock %}
+			- Place 2 Go
+		</title>
+	</head>
+
+	<body>
+
+		<header id="header" role="banner">
+			{% include "_partials/_navbar.html.twig" %}
+
+			{% block banner %}{% endblock %}
+		</header>
+
+		<div class="container-fluid p-0">
+			{% include "_partials/_flashmessages.html.twig" %}
+
+			{% block body %}{% endblock %}
+		</div>
+
+		{% include "_partials/_footer.html.twig" %}
+
+		{# MDB #}
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.js"></script>
+		{# MAPBOX #}
+		<script src='https://api.mapbox.com/mapbox-gl-js/v2.4.1/mapbox-gl.js'></script>
+		<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
+	</body>
+</html>

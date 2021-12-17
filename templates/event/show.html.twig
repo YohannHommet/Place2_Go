@@ -1,0 +1,196 @@
+{% extends "layout/base.html.twig" %}
+
+{% block title %}
+	{{ event.title }}
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<style>
+		#map {
+			width: 100%;
+			height: 100%;
+			min-height: 350px;
+			margin-bottom: 0.8rem;
+		}
+
+		@media screen and(max-width: 768px) {
+			#map {
+				margin-top: 1.5rem;
+				overflow: hidden;
+			}
+		}
+	</style>
+{% endblock %}
+
+{% block body %}
+
+	<div class="container">
+		<section id="show">
+
+			<div class="row">
+				<div class="col-sm-12 col-lg-6">
+
+					<div class="show__card">
+						<div class="show__card_header">
+							<img src="{{ event.categories[0].picture }}" alt="{{ event.categories[0].name }}" class="show__card_header_image">
+						</div>
+
+						<div class="show__card_title">
+							<h3>{{ event.title }}</h3>
+						</div>
+
+						<div class="show__card_content">
+							<div class="show__card_content-details">
+
+								<hr>
+
+								<ul class="fa-ul ms-4 list-unstyled">
+									<li>
+										<i class="fa-li fas fa-user"></i>
+										<a href="{{ path('app_profile_show', {id: event.author.id}) }}"><span class="show__card_content-author">{{ event.author.nickname }}</span></a>
+									</li>
+									<li>
+										<i class="fa-li fas fa-users"></i>
+										<span class="show__card_content-attendants">Nombre de Participants : {{ event.attendants|length }} / {{ event.maxAttendants }}</span>
+									</li>
+									<li>
+										<i class="fa-li fas fa-calendar-alt"></i> 
+										<span class="show__card_content-date">Le {{ event.eventDate | format_date('none', 'd MMMM Y à H:mm', null, 'gregorian', 'fr')}}</span>
+									</li>
+									<li>
+										<i class="fa-li fas fa-map-marker-alt"></i>
+										<span class="show__card_address">{{ event.address }}</span>
+									</li>
+								</ul>
+
+								<hr>
+
+							</div>
+
+							<div class="show__card_content-description">
+								<div class='--title'>Détails sur l'activité</div>
+								{{ event.description }}
+							</div>
+						</div>
+
+						<div class="show__card_content-footer">
+							<p class="show__card_categories">
+								{% for category in event.categories %}
+									{{ category.name }}{{ loop.last ? '' : ' - ' }}
+								{% endfor %}
+							</p>
+
+							<div class="show__cards_join">
+								<div class="list__cards_join">
+									{% if is_granted('EVENT_LEAVE', event) %}
+										{# Bouton pour ne plus participer à la sortie #}
+										<a class="btn button-secondary btn-floating-sm" href="{{ path("app_event_leave", {id:event.id}) }}" role="button" data-mdb-toggle="tooltip" data-mdb-placement="bottom" title="Quitter">
+											<i class="fas fa-sign-out-alt"></i>
+										</a>
+									{% endif %}
+									{% if is_granted('EVENT_JOIN', event) %}
+										{# Bouton pour participer à la sortie #}
+										<a href="{{ path("app_event_join", {id: event.id}) }}" class="btn button-primary btn-floating-sm ms-2" data-mdb-toggle="tooltip" data-mdb-placement="bottom" title="Joindre">
+											<i class="fas fa-user-plus"></i>
+										</a>
+									{% endif %}
+									{% if is_granted('USER_ACCESS', app.user) and app.user.id != event.author.id %}
+										{# Bouton pour signaler la sortie #}
+										<a href="{{ path("app_report_event", {id: event.id}) }}" role="button" class="btn btn-danger btn-floating-sm ms-2" data-mdb-toggle="tooltip" data-mdb-placement="bottom" title="Signaler">
+											<i class="fas fa-exclamation"></i>
+										</a>
+									{% endif %}
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+
+				<div class="col-sm-12 col-lg-6">
+
+					<div id='map' class="shadow-1"></div>
+
+				</div>
+
+			</div>
+
+			<h3 class='mt-5 mb-2 text-center'>Participants</h3>
+
+			<div class="row text-center">
+				<div class="col-12 mx-auto">
+					{% for attendant in event.attendants %}
+						<div class="chip chip-lg">
+							<img src="{{ attendant.user.avatar }}" alt="Attendant"><a href="{{ path('app_profile_show', {id: attendant.user.id}) }}" data-mdb-toggle="tooltip" data-mdb-placement="bottom" title="Voir le profil">
+								<span class="name">{{ attendant.user.nickname }}</span>
+							</a>
+						</div>
+					{% endfor %}
+				</div>
+			</div>
+
+			<h3 class="mt-5 mb-2 text-center">Commentaires</h3>
+
+			<div class="row">
+
+				{% for comment in event.comments %}
+					<div class="col-lg-8 mx-auto">
+						<div class="show__comments">
+							<div class="show__author_avatar">
+								<img class="author__avatar" src="{{comment.author.avatar }}" alt="comment_author_avatar">
+							</div>
+							<div class="show__comments_content">
+								<div class="show__comment_header">
+									Ecrit par
+									<span class="fw-bold">{{ comment.author.nickname }}</span>,
+									{% if event.author.id is same as comment.author.id %}
+										<span class="event__author">(Organisateur),</span>
+									{% endif %}
+									le
+									{{ comment.createdAt | format_date('none', 'd MMMM Y à HH:mm', null, 'gregorian', 'fr')}}
+								</div>
+								<div class="show__comment_content">
+									{{comment.content}}
+								</div>
+							</div>
+						</div>
+					</div>
+				{% else %}
+					Aucun commentaire à afficher pour cette sortie
+				{% endfor %}
+
+			</div>
+
+		</section>
+
+		{# TOGLLE BUTTON TO ADD A COMMENT #}
+		{% if is_granted ('USER_ACCESS', app.user) %}
+			<div class="comments__button">
+				<button id="toggle__comments" class="btn button-primary">Ecrire un commentaire</button>
+			</div>
+		{% endif %}
+
+		<div class="row ">
+
+			<div class="col-lg-8 mt-5 mx-auto create__comment">
+				<h3>Votre commentaire</h3>
+
+				{{ form_start(form) }}
+				{{ form_widget(form) }}
+
+				<div class="d-flex justify-content-between">
+					<button id="cancel__comment" class="btn button-secondary">Annuler</button>
+					<button type="submit" class="btn button-primary">Soumettre</button>
+					<p id="count" class="ms-auto"></p>
+				</div>
+
+				{{ form_end(form) }}
+			</div>
+		</div>
+	</div>
+
+	{% include "event/mapbox/show.html.twig" %}
+
+{% endblock %}
