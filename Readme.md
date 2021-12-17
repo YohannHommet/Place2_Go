@@ -95,10 +95,10 @@ Place 2 go is also using with webpack :
 Oriane **oriane.toque@gmail.com**  
 [@twitter](https://twitter.com/xxx) - [@linkedin](https://www.linkedin.com/in/xxx/)
 
-Yohann **yohann.hommet@gamil.com**  
+Yohann **hommet.yohann@gmail.com**  
 [@twitter](https://twitter.com/YoH_DevBack) - [@linkedin](https://www.linkedin.com/in/yohann-hommet/)
 
-Daniel **daniel@gamil.com**  
+Daniel **daniel@gmail.com**  
 [@twitter](https://twitter.com/xxx) - [@linkedin](https://www.linkedin.com/in/xxx/)
 
 Fred **fred@gmail.com**  
